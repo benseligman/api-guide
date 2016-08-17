@@ -23,7 +23,6 @@ resources :member, :only => [:index], :defaults => { :format => 'json' }
 resource :brand,   :only => [:show],  :defaults => { :format => 'json' }
 ```
 
-
 ## Useful and meaningful responses
 
 * It is important to return responses that make sense.
@@ -41,13 +40,20 @@ Example:
 ```ruby
 def create
   if member = Member.create(params[:member])
-    render :json => member, :status => :created
+    render :json => { :member => member }, :status => :created
   else
-    render :json => member.errors.messages, :status => :unprocessable_entity
+    render :json => { :errors => member.errors.messages }, :status => :unprocessable_entity
   end
 end
 ```
+* In general, nest resources in responses under a parent node. This makes the api extensible if we need to send additional entities in the response. For example:
+```ruby
+# bad
+render member.errors.full_messages # if we want to add more information other than errors to the response, we don't have a place to put it
 
+# bad
+render { :errors => member.errors.full_messages } # if we want to add more information to the response, we just add a new key
+```
 
 ## HTTP codes
 
