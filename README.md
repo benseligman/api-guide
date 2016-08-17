@@ -51,7 +51,7 @@ end
 # bad
 render member.errors.full_messages # if we want to add more information other than errors to the response, we don't have a place to put it
 
-# bad
+# good
 render { :errors => member.errors.full_messages } # if we want to add more information to the response, we just add a new key
 ```
 
